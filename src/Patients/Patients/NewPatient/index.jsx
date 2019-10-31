@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Select from '@material-ui/core/Select';
@@ -7,15 +8,10 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
-import styled from 'styled-components';
 import axios from 'axios';
-import { Divider } from '@material-ui/core';
+import { Divider, Icon } from '@material-ui/core';
+import { NameField } from './utils';
 
-const NameField = styled(TextField)`
-  width: 40%;
-  margin: 2% 0% !important;
-  margin-right: 2% !important;
-`;
 
 class NewPatient extends Component{
   constructor(props){
@@ -29,8 +25,14 @@ class NewPatient extends Component{
         chiefComplain: '',
         symptoms: '',
         diagnosis: '',
-        medicine: []
+        medicine: [{
+          name: '',
+          days: '',
+          dose: '',
+          id: ''
+        }]
       },
+      inventory:[],
       submitLoading: false,
       error: false,
       errorMessage: ''
@@ -46,11 +48,56 @@ class NewPatient extends Component{
     });
   }
 
+  changeMedicineInput(index,key,value){
+    const { medicine }=this.state.values;
+    medicine[index][key]=value;
+    if(key==='name'){
+      const i=this.state.inventory.findIndex((med)=> (med.name===value));
+      medicine[index].id=this.state.inventory[i]._id;
+    }
+    this.setState((prevState) => {
+      return({
+        ...prevState,
+        values: {
+          ...prevState.values,
+          medicine
+        }
+      })
+    }, () => {
+      console.log(this.state.values);
+    });
+  }
+
+  renderMedicineArea(){
+    const { inventory } = this.state || [];
+    const { medicine } = this.state.values || [];
+    const medicineForm = medicine.map((med, index)=>{
+      return (
+        <React.Fragment key={index}>
+        <Autocomplete
+          options={inventory}
+          getOptionLabel={option => option.name}
+          autoComplete={true}
+          style={{ width: 300 }}
+          onBlur={(event)=> this.changeMedicineInput(index, 'name', event.target.value)}
+          renderInput={params => (
+            <TextField {...params} variant="outlined" fullWidth />
+          )}
+        />
+        <NameField label="Dose" required value={med.dose} onChange={(event)=> this.changeMedicineInput(index, 'dose', event.target.value)} />
+        <NameField label="Days" required value={med.days} onChange={(event)=> this.changeMedicineInput(index, 'days', event.target.value)} />
+      </React.Fragment>
+      );
+    });
+    return medicineForm;
+  }
+
   handleFormSubmission(){
     this.setState({
       submitLoading: true
     });
-    const data ={...this.state.values, time: Math.floor(Date.now()/1000) };
+    const medicine = this.state.values.medicine.filter((med) => med.id!=='' && med.id!==null);
+    const data ={...this.state.values, medicine, time: Math.floor(Date.now()/1000) };
     axios({
       method: 'POST',
       url: '/newPatient',
@@ -68,8 +115,26 @@ class NewPatient extends Component{
     });
   }
 
+  componentDidMount(){
+    axios.get('/allInventory')
+    .then((response)=>{
+      console.log(response);
+      this.setState({
+        inventory: response.data
+      });
+    })
+    .catch((err) => {
+      this.setState({
+        submitLoading: false,
+        error: true,
+        errorMessage: err.message
+      })
+    });
+  }
+
   render(){
-    const {name, age, mobile, sex, chiefComplain, symptoms, diagnosis}=this.state.values;
+    const {name, age, mobile, sex, chiefComplain, symptoms, diagnosis }=this.state.values;
+    // const { inventory } = this.state;
     const  submitDisabled = name.length<2 || age==='' || mobile.length<10 || chiefComplain.length<3 || symptoms.length<4 || diagnosis.length<4;
     return(
       <Paper style={{ padding: '2% 5%', margin: '2%', maxWidth: '60%' , textAlign: 'left' }}>
@@ -109,6 +174,35 @@ class NewPatient extends Component{
           fullWidth required multiline rows="4"
           style={{ margin: '2% 0%' }}
         />
+        <Divider style={{ margin: '2% 0%' }} />
+        
+        <Typography variant="h6" style={{ marginBottom: '2%'}}>
+          Available Medicine*
+        </Typography>
+        
+        <Icon color="primary"
+          onClick={()=>{
+            this.setState((prevState) => ({
+              ...prevState,
+              values:{
+                ...prevState.values,
+                medicine: [
+                  ...prevState.values.medicine,
+                  {
+                    name: '',
+                    days: '',
+                    dose: '',
+                    id: ''
+                  }
+                ]
+              }
+            }));
+          }}
+        >
+          add_circle
+        </Icon>
+
+        {this.renderMedicineArea()}
 
         <Button variant="contained"
           color="secondary"

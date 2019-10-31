@@ -8,7 +8,6 @@ import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 const PatientCard = styled(Card)`
@@ -30,12 +29,6 @@ const PatientCard = styled(Card)`
 `;
 
 const PatientArea = styled.div`
-  text-align: left;
-`;
-
-const AnswerArea = styled.div`
-  padding: 0.5% 1%;
-  margin-bottom: 2%;
   text-align: left;
 `;
 
