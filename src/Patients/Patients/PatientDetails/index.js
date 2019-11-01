@@ -3,12 +3,13 @@ import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import styled from 'styled-components';
-import { Divider } from '@material-ui/core';
+import { Divider, TableHead } from '@material-ui/core';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import { getTimeFromDate } from '../NewPatient/utils';
 
 const PatientCard = styled(Card)`
   width: 70%;
@@ -28,12 +29,15 @@ const PatientCard = styled(Card)`
   }
 `;
 
-const PatientArea = styled.div`
-  text-align: left;
+const MedicineTable = styled(Table)`
+  & th{
+    font-size: 1.2em;
+  }
+  margin: 5% 0%;
 `;
 
-const TablePointer = styled(TableCell)`
-  max-width: 10%;
+const PatientArea = styled.div`
+  text-align: left;
 `;
 
 const WriteAnswerIcon = styled(QuestionAnswerIcon)`
@@ -92,7 +96,7 @@ class PatientList extends Component{
         <Divider variant="middle" style={{ margin: '2% 0%' }} />
 
         <Typography variant="subtitle1" color="secondary">
-          {`Diagnosed by ${patient.askedBy} on ${new Date(patient.time*1000).toDateString()}`}
+          {`Diagnosed by ${patient.doctor} at ${getTimeFromDate(patient.time*1000)}`}
         </Typography>
 
         <Divider variant="middle" style={{ margin: '2% 0%' }} />
@@ -103,22 +107,53 @@ class PatientList extends Component{
   renderDiagnosis(){
     const {patient}=this.state || {};
     return(
-      <Table aria-label="simple table">
-        <TableBody>
-          <TableRow>
-            <TablePointer>Chief Complain</TablePointer>
-            <TableCell>{patient.chiefComplain}</TableCell>
+      <div style={{ textAlign: 'left' }}>
+        <Typography component="h5" variant="h5" color="textSecondary" style={{ margin: '1% 0%' }}>
+          Chief Complain : 
+        </Typography>
+        <Typography component="h6" variant="h6">
+          {patient.chiefComplain}
+        </Typography>
+        <Typography component="h5" variant="h5" color="textSecondary" style={{ margin: '1% 0%' }}>
+          Symptoms : 
+        </Typography>
+        <Typography component="h6" variant="h6">
+          {patient.symptoms}
+        </Typography>
+        <Typography component="h5" variant="h5"color="textSecondary" style={{ margin: '1% 0%' }}>
+          Diagnosis : 
+        </Typography>
+        <Typography component="h6" variant="h6">
+          {patient.diagnosis}
+        </Typography>
+      </div>
+    );
+  }
+
+  renderMedicineArea(){
+    const { patient } = this.state || {};
+    return(
+      <MedicineTable aria-label="simple table">
+        <TableHead>
+          <TableRow style={{ fontSize: '1.2em' }}>
+            <TableCell>Medicine / Test</TableCell>
+            <TableCell>Per Day</TableCell>
+            <TableCell>Number Of Days</TableCell>
           </TableRow>
-          <TableRow>
-            <TablePointer>Symptoms</TablePointer>
-            <TableCell>{patient.symptoms}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TablePointer>Diagnosis</TablePointer>
-            <TableCell>{patient.diagnosis}</TableCell>
-          </TableRow>
+        </TableHead>
+        <TableBody>{
+          patient.medicine && patient.medicine.map((med) => {
+            return(
+              <TableRow>
+                <TableCell>{med.name}</TableCell>
+                <TableCell>{med.dose}</TableCell>
+                <TableCell>{med.days}</TableCell>
+              </TableRow>
+            );
+          })
+        }
         </TableBody>
-      </Table>
+      </MedicineTable>
     );
   }
 
@@ -131,6 +166,8 @@ class PatientList extends Component{
         <div className="info"  >
           {this.renderPatientArea()}
           {this.renderDiagnosis()}
+          <Divider />
+          {this.renderMedicineArea()}
         </div>
       </PatientCard>
     )
