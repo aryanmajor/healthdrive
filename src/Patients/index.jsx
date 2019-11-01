@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route, NavLink } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { AppBar, Typography, Toolbar, Button, Drawer, Divider, List, ListItem, ListItemText } from '@material-ui/core';
+import { AppBar, Typography, Toolbar, Button, Drawer, Divider, List, ListItem, ListItemText, Icon } from '@material-ui/core';
 import DescriptionIcon from '@material-ui/icons/Description';
 import NewPatient from './Patients/NewPatient';
 import PatientList from './Patients/PatientList';
@@ -14,7 +14,7 @@ const LeftDrawer = styled(Drawer)`
   & > div {
     width: 250px;
     flex-shrink: 0;
-    margin-top: 2%;
+    padding-top: 2%;
     background-color: #fff;
   }
   background-color: #fff;
@@ -25,25 +25,29 @@ class Patient extends Component{
   render(){
     const items = [{
         name: 'New Patient',
-        link: '/new-patient'
+        link: '/new-patient',
+        icon: 'note_add'
       },{
         name: 'View Patients',
-        link: 'patients'
+        link: 'patients',
+        icon: 'pageview'
       },{
         name: 'Add To Inventory',
-        link: '/new-inventory'
+        link: '/new-inventory',
+        icon: 'add_circle'
       }, {
         name: 'View Inventory',
-        link: '/inventorys'
+        link: '/inventorys',
+        icon: 'list_alt'
       }
       
     ];
     return(
       <React.Fragment>
-        <AppBar position="static" color="primary" style={{ width: 'calc(100% - 250px)', marginLeft: '250px' }}>
+        <AppBar position="static" color="primary" style={{ width: 'calc(100% - 250px)', marginLeft: '250px', color: '#fff' }}>
         <Toolbar>
             <Typography variant="h5">
-              Responsa
+              Health Drive
             </Typography>
             <span style={{ marginLeft: 'auto' }}>
               <NavLink to="/" style={{ color: 'inherit', textDecoration: 'none' }}>
@@ -63,20 +67,20 @@ class Patient extends Component{
               keepMounted: true, // Better open performance on mobile.
             }}
           >
-            <div>
-              <Divider />
+            
+              <Divider color="primary" />
                 <List>
                   {items.map((text, index) => (
-                    <Link to={text.link}>
-                      <ListItem button key={text.link}>
-                      
+                    <Link to={text.link} key={text.link} style={{ textDecoration: 'none', color: '#7a7a7a' }}>
+                      <ListItem button>
+                        <Icon fontSize="default" color="disabled" style={{ marginRight: '10px' }}>{text.icon}</Icon>
                         <ListItemText primary={text.name} />
                       </ListItem>
                     </Link>
                   ))}
                 </List>
                 <Divider />
-            </div>
+            
           </LeftDrawer>
         
         <div style={{ flexGrow: '1', paddingLeft: '1%', marginLeft: '250px' }}>

@@ -1,5 +1,7 @@
+import React from 'react';
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
+import { CircularProgress } from '@material-ui/core';
 
 const NameField = styled(TextField)`
   width: 40%;
@@ -7,6 +9,8 @@ const NameField = styled(TextField)`
   margin-right: 2% !important;
 `;
 
-const Loader = (<CircularProgress color="secondary" />);
+const Loader = (props) => (
+  <CircularProgress color={props.color || 'secondary'} />
+);
 
-export { NameField };
+export { NameField, Loader };

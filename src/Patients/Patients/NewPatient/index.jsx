@@ -6,12 +6,10 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios';
-import { Divider, Icon } from '@material-ui/core';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import { NameField } from './utils';
+import { Divider } from '@material-ui/core';
+import { NameField, Loader } from './utils';
 
 
 class NewPatient extends Component{
@@ -140,7 +138,7 @@ class NewPatient extends Component{
   render(){
     const {name, age, mobile, sex, chiefComplain, symptoms, diagnosis, doctor, address }=this.state.values;
     // const { inventory } = this.state;
-    const  submitDisabled = name.length<2 || age==='' || mobile.length<10 || chiefComplain.length<3 || symptoms.length<4 || diagnosis.length<4;
+    const  submitDisabled = name.length<2 || age==='' || mobile.length<10 || chiefComplain.length<3 || symptoms.length<4 || diagnosis.length<4 || this.state.submitLoading;
     return(
       <Paper style={{ padding: '2% 5%', margin: '2%', maxWidth: '60%' , textAlign: 'left' }}>
         
@@ -228,7 +226,7 @@ class NewPatient extends Component{
             disabled={ submitDisabled }
             style={{ minHeight: '52px', margin: '2%' , minWidth: '88px' }}
           >
-            {this.state.submitLoading && (<CircularProgress color="secondary" />)}
+            {this.state.submitLoading && <Loader color="default" />}
             {!this.state.submitLoading && ("Submit")}
             
           </Button>
