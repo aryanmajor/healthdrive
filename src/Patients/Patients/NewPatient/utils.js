@@ -7,4 +7,6 @@ const NameField = styled(TextField)`
   margin-right: 2% !important;
 `;
 
+const Loader = (<CircularProgress color="secondary" />);
+
 export { NameField };

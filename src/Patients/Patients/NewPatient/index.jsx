@@ -10,6 +10,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios';
 import { Divider, Icon } from '@material-ui/core';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { NameField } from './utils';
 
 
@@ -18,13 +19,15 @@ class NewPatient extends Component{
     super(props);
     this.state={
       values:{
-        name: '',
-        age: '',
-        sex: '',
-        mobile: '',
-        chiefComplain: '',
-        symptoms: '',
-        diagnosis: '',
+        name: 'Arayn ',
+        age: 80,
+        sex: 'Male',
+        doctor: '',
+        address: '',
+        mobile: 8638941969,
+        chiefComplain: 'Fever',
+        symptoms: 'Cold Cough',
+        diagnosis: 'Vaasdfff',
         medicine: [{
           name: '',
           days: '',
@@ -53,7 +56,9 @@ class NewPatient extends Component{
     medicine[index][key]=value;
     if(key==='name'){
       const i=this.state.inventory.findIndex((med)=> (med.name===value));
-      medicine[index].id=this.state.inventory[i]._id;
+      if(i>=0){
+        medicine[index].id=this.state.inventory[i]._id;
+      }
     }
     this.setState((prevState) => {
       return({
@@ -133,7 +138,7 @@ class NewPatient extends Component{
   }
 
   render(){
-    const {name, age, mobile, sex, chiefComplain, symptoms, diagnosis }=this.state.values;
+    const {name, age, mobile, sex, chiefComplain, symptoms, diagnosis, doctor, address }=this.state.values;
     // const { inventory } = this.state;
     const  submitDisabled = name.length<2 || age==='' || mobile.length<10 || chiefComplain.length<3 || symptoms.length<4 || diagnosis.length<4;
     return(
@@ -150,6 +155,7 @@ class NewPatient extends Component{
         <Select
           label="Sex"
           value={sex}
+          style={{ marginTop: '3.5%' }}
           onChange={(event) => this.handleFormChanges('sex', event.target.value)}
         >
           <MenuItem value={'Male'}>Male</MenuItem>
@@ -157,12 +163,21 @@ class NewPatient extends Component{
           <MenuItem value={'Other'}>Other</MenuItem>
         </Select>
 
+        <TextField placeholder="Patient Address" label="Adress" variant="outlined"
+          onChange={(event)=> this.handleFormChanges('address', event.target.value)} value={address} 
+          fullWidth required multiline rows="4"
+          style={{ margin: '2% 0%' }}
+        />
+
         <Divider style={{ margin: '2% 0%' }} />
         
         <Typography variant="h6" style={{ marginBottom: '2%'}}>
           Patient Diagnosis*
         </Typography>
 
+        <TextField placeholder="Enter Doctor Name" label="Doctor Name" variant="outlined"
+          onChange={(event)=> this.handleFormChanges('doctor', event.target.value)} value={doctor} fullWidth required
+        />
         <NameField label="Chief Complain" placeholder="Example: Cough, Fever etc." required value={chiefComplain} onChange={(event)=> this.handleFormChanges('chiefComplain', event.target.value)} />
         <TextField placeholder="Example: Fever with cough etc." label="List Symptoms" variant="outlined"
           onChange={(event)=> this.handleFormChanges('symptoms', event.target.value)} value={symptoms} 
@@ -179,41 +194,45 @@ class NewPatient extends Component{
         <Typography variant="h6" style={{ marginBottom: '2%'}}>
           Available Medicine*
         </Typography>
-        
-        <Icon color="primary"
-          onClick={()=>{
-            this.setState((prevState) => ({
-              ...prevState,
-              values:{
-                ...prevState.values,
-                medicine: [
-                  ...prevState.values.medicine,
-                  {
-                    name: '',
-                    days: '',
-                    dose: '',
-                    id: ''
-                  }
-                ]
-              }
-            }));
-          }}
-        >
-          add_circle
-        </Icon>
 
         {this.renderMedicineArea()}
 
+        <div>
         <Button variant="contained"
-          color="secondary"
-          onClick={() => this.handleFormSubmission()}
-          disabled={ submitDisabled }
-          style={{ minHeight: '52px', margin: '2%' , minWidth: '88px' }}
-        >
-          {this.state.submitLoading && (<CircularProgress color="secondary" />)}
-          {!this.state.submitLoading && ("Submit")}
-          
-        </Button>
+            color="default"
+            onClick={()=>{
+              this.setState((prevState) => ({
+                ...prevState,
+                values:{
+                  ...prevState.values,
+                  medicine: [
+                    ...prevState.values.medicine,
+                    {
+                      name: '',
+                      days: '',
+                      dose: '',
+                      id: ''
+                    }
+                  ]
+                }
+              }));
+            }}
+            disabled={ submitDisabled }
+            style={{ minHeight: '52px', margin: '2%' , minWidth: '88px' }}
+          >
+            Add Medicine            
+          </Button>
+          <Button variant="contained"
+            color="secondary"
+            onClick={() => this.handleFormSubmission()}
+            disabled={ submitDisabled }
+            style={{ minHeight: '52px', margin: '2%' , minWidth: '88px' }}
+          >
+            {this.state.submitLoading && (<CircularProgress color="secondary" />)}
+            {!this.state.submitLoading && ("Submit")}
+            
+          </Button>
+        </div>
 
         <Snackbar
           open={this.state.error}
