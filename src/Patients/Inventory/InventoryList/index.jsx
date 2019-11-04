@@ -10,7 +10,7 @@ import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add'  ;
 import axios from 'axios';
 import { NameField, Loader } from './../../Patients/NewPatient/utils';
-import { Modal, Fade, Backdrop, Divider, Button, CircularProgress } from '@material-ui/core';
+import { Modal, Fade, Backdrop, Divider, Button, CircularProgress, Typography } from '@material-ui/core';
 import styled from 'styled-components';
 
 const InventoryModal = styled(Paper)`
@@ -183,6 +183,9 @@ class PatientList extends Component{
                 searchKey: event.target.value
               })
             }} />
+            <Typography variant="subtitle1" >
+              {`${list.length} Items Found`}
+            </Typography>
         </div>
         {loadingList && (
           <div style={{ paddingLeft: '45%' }}>

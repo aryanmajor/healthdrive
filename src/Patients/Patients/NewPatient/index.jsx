@@ -17,15 +17,15 @@ class NewPatient extends Component{
     super(props);
     this.state={
       values:{
-        name: 'Arayn ',
-        age: 80,
-        sex: 'Male',
+        name: '',
+        age: 0,
+        sex: '',
         doctor: '',
         address: '',
-        mobile: 8638941969,
-        chiefComplain: 'Fever',
-        symptoms: 'Cold Cough',
-        diagnosis: 'Vaasdfff',
+        mobile: 0,
+        chiefComplain: '',
+        symptoms: '',
+        diagnosis: '',
         medicine: [{
           name: '',
           days: '',
@@ -148,7 +148,7 @@ class NewPatient extends Component{
         <TextField placeholder="Enter Patient Name" label="Name" variant="outlined"
           onChange={(event)=> this.handleFormChanges('name', event.target.value)} value={name} fullWidth required
         />
-        <NameField label="Age" required value={age} onChange={(event)=> this.handleFormChanges('age', event.target.value)} />
+        <NameField label="Age" required type="number" value={age} onChange={(event)=> this.handleFormChanges('age', event.target.value)} />
         <NameField label="Mobile Number" required value={mobile} onChange={(event)=> this.handleFormChanges('mobile', event.target.value)} />
         <Select
           label="Sex"

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Paper, Avatar, Snackbar} from '@material-ui/core';
+import { Paper, Avatar, Snackbar, Typography} from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
@@ -53,7 +53,11 @@ class PatientList extends Component{
                 searchKey: event.target.value
               })
             }} />
+            <Typography variant="subtitle1" >
+              {`${list.length} Patients Found`}
+            </Typography>
           </div>
+
           {loadingList && (
           <div style={{ paddingLeft: '45%' }}>
             <Loader />
