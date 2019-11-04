@@ -1,3 +1,12 @@
+## About
+
+Health-drive campaign are a common event wherein a community, mostly NGO's organise a health-camps in some remote areas. Various renowed doctors are invited to treat patients living in the remote areas who cannot afford costly treatments.
+
+The NGO's require some medium to store the information about patients, doctors and inventory for making the drive a successfull one. HealthDrive is a web application designed to assis this noble deed. 
+It is a web-application developed to store, update and manage the information about inventory and patients of healthdrive.
+
+## Techincal Aspect
+
 This web application project is developed by @aryanmajor on [React JS](https://github.com/facebook/create-react-app).
 The online live web application can be found at [this link](https://healthdrive.herokuapp.com/).
 The live web application is not connected to database, hence the dynamicity is absent as of now.
